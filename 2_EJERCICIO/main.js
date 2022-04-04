@@ -65,6 +65,36 @@
 // };
 
 
+function videoPlay(id){
+    const url_secreta = 'https://platziultrasecreto.com/'+id;
+    console.log("Se esta reproduciendo desdela url" + url_secreta);
+}
+
+function videoStop(id){
+    const url_secreta = 'https://platziultrasecreto.com/'+id;
+    console.log("Pausamos la url: " + url_secreta);
+}
+
+
+
+class Platziclass{
+    constructor({
+        name,
+        videoID,
+    }){
+        this.name = name;
+        this.videoID = videoID;
+
+    }
+
+    reproducir(){
+        videoPlay(this.videoID);
+    }
+
+    pausar(){
+        videoStop(this.videoID);
+    }
+}
 class Student{
     constructor({
         name,
@@ -90,13 +120,72 @@ class Student{
 }
 
 
+class FreeStudent extends Student{
+    constructor(props){
+        super(props);
+    }
+
+    approveCourse(newCourse){
+        if(newCourse.isFree){
+            this.approvedCourses.push(newCourse);
+        }else{
+            console.warn("Lo sentimos, " + this.name + " solo puedes tomar cursos gratis.");
+        }
+
+    }
+
+}
+
+class BasicStudent extends Student{
+    constructor(props){
+        super(props);
+    }
+
+    approveCourse(newCourse){
+        if(newCourse.lang !== "english"){
+            this.approvedCourses.push(newCourse);
+        }else{
+            console.warn("Lo sentimos, " + this.name + " solo puedes tomar cursos en español.");
+        }
+
+    }
+
+}
+
+class ExpertStudent extends Student{
+    constructor(props){
+        super(props);
+    }
+
+    approveCourse(newCourse){
+        this.approvedCourses.push(newCourse);
+    }
+
+}
+
 class Course{
     constructor({
         name,
-        clases = []
+        clases = [],
+        isFree = false,
+        lang = "spanish",
     }){
-        this.name = name;
+        this._name = name;
         this.clases = clases;
+        this.isFree = isFree;
+        this.lang = lang;
+    }
+
+    get name(){
+        return this._name;
+    }
+
+    set name(nuevoNombrecito){
+        if (nuevoNombrecito === "Curso Malito de Programacion Basica"){
+            console.error('Wey no hagas eso xd')
+        }else{
+            this._name = nuevoNombrecito;
+        }
     }
 }
 class LearningPath{
@@ -111,8 +200,12 @@ class LearningPath{
 
 const cursoProgBasica = new Course({
     name:"Curso de Programacion Basica",
-    clases:[]
+    clases:[],
+    isFree:true,
 })
+
+cursoProgBasica.name
+
 
 const cursoDATAVIZ = new Course({
     name:"Curso de DATAVIZ",
@@ -121,7 +214,8 @@ const cursoDATAVIZ = new Course({
 
 const cursoHTML = new Course({
     name:"Curso de HTML",
-    clases:[]
+    clases:[],
+    lang:"english",
 })
 
 const cursoCSS = new Course({
@@ -160,7 +254,7 @@ const escuelaVideojuegos = new LearningPath({
 });
 
 
-const juan2 = new Student({
+const juan2 = new FreeStudent({
     name: "JuanDC",
     username: "juandc",
     email:"juan@gmail.com",
@@ -171,7 +265,7 @@ const juan2 = new Student({
 
 })
 
-const miguelito = new Student({
+const miguelito = new BasicStudent({
     name: "Miguel",
     username: "migueldc",
     email:"juan@gmail.com",
